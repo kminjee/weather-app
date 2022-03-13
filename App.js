@@ -18,6 +18,15 @@ const icons = {
   Thunderstorm: "lightning",
 }
 
+const weather = {
+  Clear: { gradient: ['#0359AE', '#EBE5D9'] },
+  Clouds: { gradient: ['#A4A6AA', '#5A6B75'] },
+  Rain: { gradient: ['#A4A6AA', '#5A6B75'] },
+  Atmosphere: { gradient: ['#0359AE', '#EBE5D9'] },
+  Snow: { gradient: ['#DBDBE5', '#A5B7C1'] },
+  Drizzle: { gradient: ['#0359AE', '#EBE5D9'] },
+  Thunderstorm: { gradient: ['#0359AE', '#EBE5D9'] }
+}
 
 export default function App() {
 
@@ -38,17 +47,14 @@ export default function App() {
 
     const json = await response.json();
     setDays(json.daily);
-  }
+
+  };
 
   useEffect(() => {
     ask();
   }, [])
 
   return (
-    <LinearGradient style={styles.container} colors={['#0359AE', '#EBE5D9']}>
-      <View style={styles.city}>
-        <Text style={styles.cityName}>{city}</Text>
-      </View>
       <ScrollView 
         pagingEnabled 
         horizontal
@@ -57,15 +63,23 @@ export default function App() {
         {days.length === 0 
           ? (<View style={styles.loading}><ActivityIndicator color="white" size="large" /></View>)
           : (days.map((day, idx) => 
-              <View key={idx} style={styles.day}>
-                <Text style={styles.temp}>{parseFloat(day.temp.day).toFixed(0)}</Text>
-                <Text style={styles.desc}><Fontisto name={icons[day.weather[0].main]} size={30} color="white" /> {day.weather[0].main}</Text>
-                <Text style={styles.subDesc}>{day.weather[0].description}</Text>
-              </View>
+              <LinearGradient 
+                key={idx}
+                style={styles.container} 
+                colors={[weather[day.weather[0].main].gradient[0], weather[day.weather[0].main].gradient[1]]}
+              >
+                <View style={styles.city}>
+                  <Text style={styles.cityName}></Text>
+                </View>
+                <View style={styles.day}>
+                  <Text style={styles.temp}>{parseFloat(day.temp.day).toFixed(0)}</Text>
+                  <Text style={styles.desc}><Fontisto name={icons[day.weather[0].main]} size={30} color="white" /> {day.weather[0].main}</Text>
+                  <Text style={styles.subDesc}>{day.weather[0].description}</Text>
+                </View>
+              </LinearGradient>
             ))
-        }
+          }
       </ScrollView>
-    </LinearGradient>
   );
 }
 
@@ -88,8 +102,10 @@ const styles = StyleSheet.create({
     marginTop: 10 
   },
   day: {
+    flex: 2,
     width: SCREEN_WIDTH,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 30 
   },
   temp: {
     fontSize: 170,
@@ -97,10 +113,12 @@ const styles = StyleSheet.create({
     color: '#FFF'
   },
   desc: {
+    marginTop: -10, 
     fontSize: 40,
     color: '#FFF'
   },
   subDesc: {
+    marginTop: 10, 
     fontSize: 20,
     color: '#FFF'
   }
