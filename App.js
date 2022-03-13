@@ -6,7 +6,7 @@ import * as Location from 'expo-location';
 
 const { width:SCREEN_WIDTH } = Dimensions.get("window");
 
-const API_KEY = 'fa0d574883f396a9db83a71e13a4af8f';
+const API_KEY = null;
 
 const icons = {
   Clear: "day-sunny",
